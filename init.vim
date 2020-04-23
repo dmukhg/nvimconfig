@@ -76,7 +76,6 @@ set formatoptions+=t " Hard wrap at 120 characters
 " Load jsx plugin for typescript
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
 
-=======
 " Add fzf to runtimepath
 set runtimepath+=/usr/local/opt/fzf
 
