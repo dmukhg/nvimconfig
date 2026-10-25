@@ -79,6 +79,11 @@ autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
 " Add fzf to runtimepath
 set runtimepath+=/usr/local/opt/fzf
 
+" Configure netrw kindalike nerdtree
+let g:netrw_browse_split = 4
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+
 " Highlight current window automatically
 augroup HightlightCurrentWindow
     autocmd!
