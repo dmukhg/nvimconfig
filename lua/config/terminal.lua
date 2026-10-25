@@ -41,7 +41,8 @@ vim.api.nvim_create_autocmd("TermOpen", {
     vim.wo.signcolumn = "no"
     vim.bo[args.buf].scrollback = 100000
     -- Claude Code uses <Esc><Esc> itself (edit previous message), so it only gets <C-q>
-    if not vim.api.nvim_buf_get_name(args.buf):match("claude") then
+    -- Buffer names look like term://{cwd}//{pid}:{cmd}; only look at the command
+    if not vim.api.nvim_buf_get_name(args.buf):match("//%d+:.*claude") then
       vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { buffer = args.buf, desc = "Terminal: normal mode" })
     end
   end,

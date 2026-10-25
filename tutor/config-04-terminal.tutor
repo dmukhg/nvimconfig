@@ -1,0 +1,64 @@
+# Terminal
+
+Neovim has a built-in terminal. This config adds a single shell that slides
+up from the bottom, and easy ways to treat its output like a normal buffer:
+search it, move around it and yank from it without the mouse.
+
+    `<C-/>`{normal}          open / hide the terminal (works from inside it too)
+    `<Esc><Esc>`{normal}     leave typing mode: now the output is a normal buffer
+    `<C-q>`{normal}          same thing; also works in the Claude panel
+    `i`{normal} or `a`{normal}       start typing in the shell again
+
+Hiding the terminal keeps the shell running, with its history and current
+directory. Typing `exit` closes it for good; the next `<C-/>`{normal} starts a new one.
+
+# Lesson 4.1: Toggle
+
+ 1. Press `<C-/>`{normal}. A shell opens at the bottom, ready for typing.
+ 2. Run `pwd`. Press `<C-/>`{normal} to hide it, then `<C-/>`{normal} again. `pwd`'s output is
+    still there.
+
+The shell starts in the working directory of the tab where you first open it.
+Opened from the playground tab, that is the playground.
+
+# Lesson 4.2: Scrollback
+
+Once you leave typing mode, every vim motion works on the output: `gg`{normal}, `G`{normal},
+`/`{normal} search, `<C-u>`{normal} / `<C-d>`{normal}, visual mode, `y`{normal}. The window keeps the last
+100,000 lines.
+
+ 1. Open the terminal and run:
+
+        seq 1 5000 && echo "tutor-$((6 * 7))"
+
+ 2. Press `<Esc><Esc>`{normal}. Press `gg`{normal} to go to the top of the output, then
+    search with `/4999`{normal}.
+ 3. Press `G`{normal}, move to the `tutor-...` line and yank the word with `yiW`{normal}.
+ 4. Come back to this lesson (hide the terminal with `<C-/>`{normal}, or `<C-k>`{normal}),
+    put the cursor on the `____` below and type `viWp`{normal} to replace it with
+    what you yanked.
+
+    terminal output: ____
+
+ 5. Open the terminal again. It is still in normal mode, so press `i`{normal} to type.
+
+# Lesson 4.3: Moving between windows
+
+In typing mode, keys go to the shell, so window commands don't work. Leave
+typing mode first, then move as usual:
+
+    `<Esc><Esc>`{normal} `<C-k>`{normal}     terminal → the window above
+    `<C-j>`{normal}             back down to the terminal
+
+For a second, separate terminal, use plain Neovim: `:vsplit | terminal`{vim} or
+`:tab terminal`{vim}. They get the same scrollback and `<Esc><Esc>`{normal}.
+
+# Lesson 4.4: Gotchas
+
+- `<Esc><Esc>`{normal} needs both presses within a second. A single `<Esc>`{normal} still reaches
+  the shell, but only after that pause.
+- In the Claude panel, `<Esc><Esc>`{normal} belongs to Claude (it edits your previous
+  message). Use `<C-q>`{normal} there.
+- Many terminals send `<C-/>`{normal} as `<C-_>`{normal}. Both are mapped.
+
+Next: [Claude Code](@tutor:config-05-claude) · [Index](@tutor:config-00-index)

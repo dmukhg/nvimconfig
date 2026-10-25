@@ -19,6 +19,8 @@
 - [x] Claude Code: claudecode.nvim (`<Space>a*`), native terminal provider in a right split
 - [x] Statusline: lualine
 - [x] which-key
+- [x] Tutorials: `:Tutor config-00-index`, practice project via `:Playground`
+- [x] Removed `legacy/` (old init.vim and monokai colors; still in git history)
 
 ## To verify
 - [ ] Each piece above, tried for real

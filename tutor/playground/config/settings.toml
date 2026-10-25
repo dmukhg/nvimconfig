@@ -1,0 +1,6 @@
+[store]
+name = "Corner Shop"
+currency = "EUR"
+
+[tutorial]
+treasure = "compass"

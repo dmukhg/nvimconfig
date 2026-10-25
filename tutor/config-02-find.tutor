@@ -1,0 +1,101 @@
+# Finding things
+
+Two tools: fzf-lua, a fuzzy finder for files, text, buffers and more, and
+nvim-tree, a NerdTree-style file tree. Start with a fresh playground:
+
+    :Playground!
+
+Everything searches the playground's working directory. Come back here with
+`gT`{normal}.
+
+# Lesson 2.1: Finding files
+
+`<Space><Space>`{normal} (or `<Space>ff`{normal}) lists every file in the project. Type a few
+letters from anywhere in the path; they don't need to be next to each other.
+`oct ide` finds `notes/2026/october/ideas.md`.
+
+Inside any fzf-lua picker:
+
+    `<C-n>`{normal} / `<C-p>`{normal}   move down / up (arrow keys also work)
+    `<Enter>`{normal}         open
+    `<C-v>`{normal}           open in a vertical split
+    `<C-s>`{normal}           open in a horizontal split
+    `<C-t>`{normal}           open in a new tab
+    `<Tab>`{normal}           mark several entries; `<Enter>`{normal} then opens all of them
+    `<S-Down>`{normal} / `<S-Up>`{normal}  scroll the preview
+    `<F4>`{normal}            hide / show the preview
+    `<F1>`{normal}            every key available in this picker
+    `<Esc>`{normal}           close
+
+ 1. Press `<Space><Space>`{normal}, find the October ideas file and open it.
+    What is the codename of the next release?
+
+    codename: ____
+
+ 2. Press `<Space><Space>`{normal} again, find `inventory.py` and open it in a vertical
+    split with `<C-v>`{normal}.
+
+# Lesson 2.2: Searching text
+
+    `<Space>fg`{normal}   live grep: results update as you type (ripgrep regex)
+    `<Space>fw`{normal}   grep the word under the cursor (in visual mode: the selection)
+    `<Space>f/`{normal}   fuzzy-search the lines of the current buffer
+    `<Space>fr`{normal}   reopen the last picker, with its query and position
+
+In live grep, `<C-g>`{normal} switches to fuzzy-filtering the current results, which
+is handy for narrowing a big result list by file name.
+
+ 1. Press `<Space>fg`{normal} and type `treasure`. Which value is stored next to it?
+
+    treasure: ____
+
+ 2. Press `<Esc>`{normal}, then `<Space>fr`{normal}. Your search is back where you left it.
+
+# Lesson 2.3: Buffers, history and help
+
+    `<Space>fb`{normal}   open buffers
+    `<Space>fo`{normal}   recently opened files, across sessions
+    `<Space>fh`{normal}   Neovim help tags
+    `<Space>fk`{normal}   every keymap, searchable by description
+
+ 1. Press `<Space>fk`{normal} and type `toggle terminal` to see which key does it.
+ 2. Press `<Space>fo`{normal}. The playground files you opened in the last lesson
+    are at the top.
+
+# Lesson 2.4: The file tree
+
+    `<Space>n`{normal}    toggle the tree
+    `<Space>N`{normal}    open the tree with the current file revealed
+
+Inside the tree:
+
+    `<Enter>`{normal} or `o`{normal}   open file / expand or collapse folder
+    `<C-v>`{normal} `<C-x>`{normal} `<C-t>`{normal}  open in vertical split / split / tab
+    `<Tab>`{normal}          preview the file, keeping focus in the tree
+    `P`{normal}              go to the parent folder
+    `a`{normal}              create a file; end the name with `/` for a folder
+    `r`{normal}              rename (`e`{normal}: rename only the base name)
+    `d`{normal}              delete
+    `x`{normal} `c`{normal} `p`{normal}          cut / copy / paste
+    `y`{normal} `Y`{normal} `gy`{normal}         copy the name / relative path / absolute path
+    `f`{normal}              filter the tree as you type (`F`{normal} clears it)
+    `H`{normal}              show / hide dotfiles
+    `E`{normal} `W`{normal}            expand / collapse everything
+    `q`{normal}              close the tree
+    `g?`{normal}             all tree keys
+
+ 1. Open `notes/2026/october/ideas.md` (with `<Space><Space>`{normal}) and press `<Space>N`{normal}. The
+    tree opens on that file. Which other folder sits next to `october`?
+
+    sibling folder: ____
+
+ 2. In the tree, put the cursor on the `notes` folder, press `a`{normal} and create
+    `todo.md`. Then rename it with `r`{normal} to `todo-later.md`, and delete it with `d`{normal}.
+
+# Summary
+
+    `<Space><Space>`{normal} files   `<Space>fg`{normal} grep   `<Space>fw`{normal} word   `<Space>f/`{normal} buffer lines
+    `<Space>fb`{normal} buffers      `<Space>fo`{normal} recent `<Space>fr`{normal} resume `<Space>fk`{normal} keymaps
+    `<Space>n`{normal} tree          `<Space>N`{normal} reveal file in tree
+
+Next: [Git](@tutor:config-03-git) · [Index](@tutor:config-00-index)
