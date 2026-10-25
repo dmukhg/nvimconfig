@@ -1,0 +1,51 @@
+# Tutorials for this Neovim config
+
+These lessons cover what this config adds on top of stock Neovim: language
+servers, the fuzzy finder and file tree, git, the terminal and Claude Code.
+They assume you already know vim itself (motions, editing, splits, tabs).
+
+# How the lessons work
+
+- Some lines have a ✗ in the sign column. These are questions. Put the cursor on
+  the `____`, type `ciW`{normal} and your answer, then `<Esc>`{normal}. The ✗ turns into ✓ when
+  the answer is right.
+- A command on a line of its own can be run by putting the cursor on it and
+  typing `>>`{normal}. Try it now:
+
+    :echo "Commands in lessons run with >>"
+
+- `<Enter>`{normal} on a [link](@tutor:config-01-lsp) opens that lesson.
+- Nothing you type into a lesson is saved: lessons can't be written to disk.
+- Open any lesson directly with `:Tutor config-`{vim} and `<Tab>`{normal} to complete the name.
+
+# The playground
+
+Exercises happen in a small practice project: a Python shop script that is also
+a git repository with some history. Open it with:
+
+    :Playground
+
+It opens in a new tab, with its own working directory, so the finder and git
+only see the practice project. Use `gt`{normal} / `gT`{normal} to move between the lesson
+and the playground.
+
+`:Playground!` throws away your changes and rebuilds the project. Each lesson
+starts with it, so lessons don't depend on each other.
+
+# Lessons
+
+1. [Language servers](@tutor:config-01-lsp): hover, jumping, diagnostics, code
+   actions, rename, completion, formatting
+2. [Finding things](@tutor:config-02-find): fzf-lua and the file tree
+3. [Git](@tutor:config-03-git): hunks, blame, diffs, history, branches, rebase
+4. [Terminal](@tutor:config-04-terminal): toggling a shell, scrolling it like a buffer
+5. [Claude Code](@tutor:config-05-claude): the Claude panel, sending context,
+   reviewing Claude's edits
+
+# When you forget a key
+
+- Press `<Space>`{normal} and wait. A popup lists every group: `a` claude, `c` code,
+  `f` find, `g` git, `h` hunks, `u` toggles.
+- `<Space>fk`{normal} fuzzy-searches every keymap by its description.
+- Plugin windows have their own help: `g?`{normal} in the file tree and diff views,
+  `?`{normal} in Neogit, `<F1>`{normal} in the fuzzy finder.

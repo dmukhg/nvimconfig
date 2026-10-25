@@ -1,0 +1,163 @@
+# Language servers
+
+A language server gives Neovim the IDE features: docs, go to definition,
+errors, fixes, renames, completion. This config runs:
+
+    TypeScript / JavaScript   vtsls
+    Svelte                    svelte
+    Rust                      rust-analyzer
+    C / C++                   clangd
+    Python                    basedpyright (types) + ruff (lint, format)
+
+The keys are the same in every language. This lesson practises on Python.
+Start with a fresh playground (cursor on the line, then `>>`{normal}):
+
+    :Playground!
+
+It opens `shop.py` in a new tab. Give the server a second or two; red and
+yellow messages at the ends of lines mean it is attached. Come back here with
+`gT`{normal} after each step.
+
+# Lesson 1.1: Hover
+
+`K`{normal} shows the documentation of the symbol under the cursor in a float.
+Press `K`{normal} again to jump into the float (to scroll or yank from it), and `q`{normal}
+to close it. Moving the cursor also closes it.
+
+ 1. In `shop.py`, put the cursor on `total_value` in the `from inventory import`
+    line and press `K`{normal}.
+ 2. The docstring contains a secret word. Write it here:
+
+    secret word: ____
+
+# Lesson 1.2: Jumping to code
+
+    `gd`{normal}      go to definition
+    `gD`{normal}      go to declaration (mostly C/C++ headers)
+    `grt`{normal}     go to the definition of the symbol's type
+    `gri`{normal}     go to implementations (interfaces, traits)
+    `<C-o>`{normal}   jump back
+    `<C-i>`{normal}   jump forward again
+
+ 1. In `shop.py`, put the cursor on `RETRY_LIMIT` in `print("retries:", ...)`
+    and press `gd`{normal}. You land in `inventory.py`. What is its value?
+
+    RETRY_LIMIT is: ____
+
+ 2. Press `<C-o>`{normal} to return to `shop.py`.
+ 3. In `inventory.py`, put the cursor on the `item` parameter of `restock` and
+    press `grt`{normal}. You land on the `Item` class: the type of `item`.
+
+# Lesson 1.3: References and symbols
+
+    `grr`{normal}           list every reference in the quickfix list
+    `]q`{normal} / `[q`{normal}       next / previous quickfix entry, without opening the list
+    `gO`{normal}            outline of the current file (location list)
+    `<Space>fs`{normal}     fuzzy-search symbols in this file
+    `<Space>fS`{normal}     fuzzy-search symbols in the whole project
+
+ 1. In `inventory.py`, put the cursor on `def restock` and press `grr`{normal}. The
+    list at the bottom shows every place it is used. `<Enter>`{normal} on a line jumps
+    there; `:cclose`{vim} closes the list.
+ 2. Press `<Space>fS`{normal} and type `item`. Pick the `Item` class with `<Enter>`{normal}.
+
+# Lesson 1.4: Diagnostics
+
+Errors and warnings appear at the end of the line, with a sign in the left
+column.
+
+    `]d`{normal} / `[d`{normal}       next / previous diagnostic
+    `]D`{normal} / `[D`{normal}       last / first diagnostic in the file
+    `<Space>e`{normal}      show the full message(s) for this line in a float
+    `<Space>fd`{normal}     fuzzy list of diagnostics in this file
+    `<Space>fD`{normal}     ... in the whole project
+
+ 1. In `shop.py`, go to the top with `gg`{normal} and press `]d`{normal} until you reach the line
+    starting with `print("value:"`. Press `<Space>e`{normal} to read the messages.
+    Which name do they say is not defined?
+
+    undefined name: ____
+
+ 2. Fix the typo in `shop.py`. The diagnostic disappears as you type.
+
+# Lesson 1.5: Code actions
+
+`gra`{normal} lists the fixes the server offers at the cursor (a numbered menu; type
+the number and `<Enter>`{normal}). It also works on a visual selection.
+
+ 1. In `shop.py`, put the cursor on `import os` and press `gra`{normal}. Choose the
+    action that removes the unused import.
+ 2. Put the cursor on `"10"` in the `restock(...)` call. `<Space>e`{normal} explains the type
+    error. Fix it by hand: `"10"` should be the number `10`.
+
+# Lesson 1.6: Rename
+
+`grn`{normal} renames a symbol everywhere the server knows about, across files.
+
+ 1. In `shop.py`, put the cursor on `restock` and press `grn`{normal}. Type `replenish`
+    and `<Enter>`{normal}.
+ 2. Open `inventory.py`: the function was renamed there too. Renames can touch
+    files you have not opened yet, so save everything with `:wa`{vim}.
+
+# Lesson 1.7: Completion
+
+Completion pops up as you type in insert mode.
+
+    `<C-n>`{normal} / `<C-p>`{normal}    next / previous item (arrow keys also work)
+    `<C-y>`{normal}            accept the selected item
+    `<C-e>`{normal}            close the menu
+    `<C-Space>`{normal}        open the menu (or its docs) when it is not showing
+    `<C-f>`{normal} / `<C-b>`{normal}    scroll the documentation beside the menu
+    `<Tab>`{normal} / `<S-Tab>`{normal}  jump between placeholders after accepting a snippet
+    `<C-k>`{normal}            show / hide the signature help for the current call
+
+ 1. In `shop.py`, add a new line inside `main()` and type `print(stock[0].`
+ 2. Pick `price_cents` with `<C-n>`{normal} and accept it with `<C-y>`{normal}. Close the bracket.
+ 3. On another new line type `replenish(`. The signature help shows the
+    parameters, highlighting the one you are on. `<Esc>`{normal} and undo the line.
+
+# Lesson 1.8: Inlay hints
+
+`<Space>uh`{normal} toggles inline hints: inferred types and parameter names, drawn
+as dim text that is not part of the file.
+
+ 1. In `shop.py`, press `<Space>uh`{normal}. `stock` now shows its type. Press it again to
+    hide the hints.
+
+# Lesson 1.9: Formatting
+
+Files are formatted when you save:
+
+    Python                               ruff
+    Rust                                 rustfmt
+    JS, TS, Svelte, CSS, HTML, JSON, YAML  prettierd, only if the project has a prettier config
+    C / C++                              clang-format, only if the project has a .clang-format
+
+    `<Space>cf`{normal}   format now (also a visual selection); uses the language server
+                if no formatter applies
+    `<Space>uf`{normal}   turn format on save off / on for this session
+    `:ConformInfo`{vim}  shows which formatters apply to the current file
+
+ 1. In `shop.py`, add this line inside `main()`, spacing and all:
+
+        prices=[ 50,75,   120 ]
+
+    Press `<Space>cf`{normal}. It is reformatted.
+ 2. Press `<Space>uf`{normal} to turn off format on save, mess up the spacing again, and
+    `:w`{vim}. It stays messy. Press `<Space>uf`{normal} again and `:w`{vim}: fixed.
+
+# Lesson 1.10: When a server misbehaves
+
+    `:checkhealth vim.lsp`{vim}   which servers are attached to this buffer, and errors
+    `:lsp restart`{vim}           restart the servers for this buffer
+    `:Mason`{vim}                 install / update servers and formatters (`g?` for help)
+    `:messages`{vim}              recent error messages
+
+# Summary
+
+    `K`{normal} hover          `gd`{normal} definition   `grt`{normal} type     `gri`{normal} implementation
+    `grr`{normal} references   `gO`{normal} outline      `grn`{normal} rename   `gra`{normal} code action
+    `]d`{normal} `[d`{normal} diagnostics `<Space>e`{normal} message   `<Space>f{s,S,d,D}`{normal} fuzzy lists
+    `<Space>cf`{normal} format    `<Space>uf`{normal} format on save   `<Space>uh`{normal} inlay hints
+
+Next: [Finding things](@tutor:config-02-find) · [Index](@tutor:config-00-index)

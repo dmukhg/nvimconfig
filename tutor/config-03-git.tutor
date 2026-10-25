@@ -1,0 +1,145 @@
+# Git
+
+Three tools work together:
+
+    gitsigns   changes in the gutter, hunks, inline blame
+    diffview   side-by-side diffs and file / repo history
+    neogit     a status screen to stage, commit, branch, rebase, push and pull
+
+The playground is a git repository with this history:
+
+    main               Initial inventory and shop      (Ada Lovelace)
+                       Raise retry limit               (Grace Hopper)
+    feature/discount     + Add discount support          (Alan Turing)
+                         + Fix typo in discount docstring (Alan Turing)
+
+Start with a fresh playground:
+
+    :Playground!
+
+# Lesson 3.1: Hunks
+
+A hunk is one block of changed lines. Changed lines get a coloured bar in the
+gutter.
+
+    `]h`{normal} / `[h`{normal}       next / previous hunk
+    `<Space>hp`{normal}     preview the hunk inline (what it was before)
+    `<Space>hs`{normal}     stage the hunk (in visual mode: only the selected lines)
+    `<Space>hr`{normal}     reset the hunk: throw away the change
+    `<Space>hS`{normal}     stage the whole file
+    `<Space>hR`{normal}     reset the whole file
+    `ih`{normal}            text object for the hunk, e.g. `dih`{normal} or `vih`{normal}
+
+ 1. In `shop.py`, change `"apple"` to `"plum"` and `"retries:"` to `"tries:"`.
+    `:w`{vim}. Two bars appear in the gutter.
+ 2. `gg`{normal}, then `]h`{normal} twice to visit both hunks. On each, try `<Space>hp`{normal}.
+ 3. On the `"tries:"` hunk, press `<Space>hr`{normal}. It goes back to `"retries:"`.
+ 4. On the `"plum"` hunk, press `<Space>hs`{normal}. Its bar changes style: it is staged.
+
+# Lesson 3.2: Blame
+
+The current line's author, age and commit message show as dim text at the end
+of the line after a short pause.
+
+    `<Space>hb`{normal}     the whole commit for this line, in a float
+    `<Space>hB`{normal}     blame the whole file in a side panel
+    `<Space>ub`{normal}     turn the end-of-line blame off / on
+
+ 1. Open `inventory.py` and put the cursor on `RETRY_LIMIT = 7`. Who changed it
+    last?
+
+    retry limit changed by: ____
+
+ 2. Press `<Space>hb`{normal} to see that whole commit.
+
+# Lesson 3.3: Diffs and history
+
+    `<Space>gd`{normal}     diff of all uncommitted changes, file by file
+    `<Space>gh`{normal}     history of the current file (in visual mode: of the selected lines)
+    `<Space>gH`{normal}     history of the whole repository
+    `<Space>gq`{normal}     close the diff / history tab
+
+Inside those views:
+
+    `<Tab>`{normal} / `<S-Tab>`{normal}   next / previous file
+    `<Enter>`{normal}           open the entry under the cursor (in the side panel)
+    `]c`{normal} / `[c`{normal}         next / previous change inside a diff
+    `-`{normal} or `s`{normal}          stage / unstage the file (status diff only)
+    `L`{normal}                 commit details (history view)
+    `gf`{normal}                open the file for editing
+    `g?`{normal}                all keys
+
+ 1. Press `<Space>gd`{normal}. You see your staged `"plum"` change. Close with `<Space>gq`{normal}.
+ 2. Open `inventory.py` and press `<Space>gh`{normal}. Select the older commit,
+    "Initial inventory and shop". What was the retry limit originally?
+
+    original retry limit: ____
+
+ 3. Close with `<Space>gq`{normal}.
+
+# Lesson 3.4: Neogit status, staging and committing
+
+`<Space>gg`{normal} opens Neogit in a new tab. It works like Magit: a status screen where
+single keys act on the item under the cursor, and popups (menus of options)
+for bigger commands.
+
+    `<Tab>`{normal}       expand / collapse a file to see its diff
+    `s`{normal} / `u`{normal}     stage / unstage the file or hunk under the cursor
+    `x`{normal}           discard the change under the cursor
+    `<Enter>`{normal}     open the file
+    `c`{normal}           commit popup (`c`{normal} again: commit)
+    `b`{normal}           branch popup
+    `r`{normal}           rebase popup
+    `l`{normal}           log popup (`l`{normal} again: log of this branch)
+    `P`{normal} / `p`{normal} / `f`{normal}   push / pull / fetch popups
+    `?`{normal}           every popup and key
+    `q`{normal}           close
+
+Popups list their options; press the highlighted letter. In the commit message
+editor, `:wq`{vim} (or `<C-c><C-c>`{normal}) commits and `<C-c><C-k>`{normal} aborts.
+
+ 1. Press `<Space>gg`{normal}. `"plum"` is under "Staged changes". Put the cursor on
+    `shop.py` and press `<Tab>`{normal} to see the diff.
+ 2. Press `c`{normal} then `c`{normal}. Write the message `Sell plums`, then `:wq`{vim}.
+ 3. Press `l`{normal} then `l`{normal}. Your commit is on top. `q`{normal} to close the log.
+
+# Lesson 3.5: Branches
+
+    `<Space>gb`{normal}     fuzzy list of branches; `<Enter>`{normal} switches to one
+    Neogit `b`{normal}      branch popup: `b`{normal} checkout, `c`{normal} create and check out,
+                  `m`{normal} rename, `D`{normal} delete
+
+ 1. Press `<Space>gb`{normal}, pick `feature/discount` and `<Enter>`{normal}.
+ 2. Open `inventory.py` (`:e`{vim} reloads it if it is already open). How big is the
+    discount?
+
+    discount percent: ____
+
+# Lesson 3.6: Interactive rebase
+
+The last two commits on `feature/discount` should be one commit. You will fold
+the typo fix into the commit before it.
+
+ 1. Make sure you are on `feature/discount`, then `<Space>gg`{normal}.
+ 2. Press `r`{normal} then `i`{normal} (interactively). A list of commits appears: move to
+    "Add discount support" and press `<Enter>`{normal}. That commit and everything
+    above it will be rebased.
+ 3. In the rebase editor, put the cursor on "Fix typo in discount docstring"
+    and press `f`{normal} (fixup: merge into the commit above and drop this message).
+    Other keys: `p`{normal} pick, `r`{normal} reword, `s`{normal} squash, `d`{normal} drop,
+    `gk`{normal} / `gj`{normal} move the commit up / down.
+ 4. `:wq`{vim} (or `<C-c><C-c>`{normal}) to run the rebase.
+ 5. Press `l`{normal} `l`{normal}. What is the message of the newest commit now?
+
+    newest commit: ____
+
+ 6. Switch back to `main` with `<Space>gb`{normal}.
+
+# Summary
+
+    `]h`{normal} `[h`{normal} hunks       `<Space>hp`{normal} preview   `<Space>hs`{normal} stage   `<Space>hr`{normal} reset
+    `<Space>hb`{normal} blame line `<Space>hB`{normal} blame file `<Space>ub`{normal} inline blame
+    `<Space>gd`{normal} diff       `<Space>gh`{normal} file history `<Space>gH`{normal} repo history `<Space>gq`{normal} close
+    `<Space>gg`{normal} Neogit     `<Space>gl`{normal} Neogit log  `<Space>gb`{normal} switch branch
+
+Next: [Terminal](@tutor:config-04-terminal) · [Index](@tutor:config-00-index)

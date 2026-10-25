@@ -1,0 +1,83 @@
+# Claude Code
+
+claudecode.nvim connects the Claude Code CLI to Neovim the same way the VS Code
+extension does:
+
+- Claude always knows which file you are in and what you have selected.
+- When Claude wants to edit a file, the change opens as a diff in Neovim, and
+  you accept or reject it there.
+- The conversation itself runs in a panel on the right.
+
+    `<Space>ac`{normal}   open / hide the Claude panel
+    `<Space>af`{normal}   jump to the panel (opens it if needed)
+    `<Space>ar`{normal}   resume an earlier conversation (pick from a list)
+    `<Space>aC`{normal}   continue the most recent conversation
+    `<Space>am`{normal}   choose the model
+
+Start with a fresh playground, so Claude's edits land there:
+
+    :Playground!
+
+# Lesson 5.1: The panel
+
+ 1. In the playground tab, press `<Space>ac`{normal}. Claude starts in the playground
+    folder. The first time, it asks whether to trust the folder.
+ 2. Ask: `What does shop.py do?` and press `<Enter>`{normal}.
+ 3. The panel is a terminal. Leave typing mode with `<C-q>`{normal} (not `<Esc><Esc>`{normal},
+    which Claude uses itself). Now scroll, search and yank as in any buffer.
+ 4. `<C-h>`{normal} moves to the code window. `<Space>af`{normal} jumps back into Claude, ready
+    to type.
+
+# Lesson 5.2: Giving Claude context
+
+Claude sees the current file and selection automatically. Look for "In
+shop.py" or "N lines selected" under Claude's input box. To attach something
+explicitly:
+
+    `<Space>as`{normal}   (visual mode) send the selected lines
+    `<Space>ab`{normal}   add the current file
+    `<Space>as`{normal}   (in the file tree) add the file or folder under the cursor
+
+Sending adds an `@file#L1-5` reference to Claude's input box. Keep typing
+your question after it.
+
+ 1. In `inventory.py`, select the `restock` function with `V`{normal} and a motion,
+    then press `<Space>as`{normal}.
+ 2. In the Claude panel, after the reference, type
+    `Add input validation: amount must not be negative` and `<Enter>`{normal}.
+
+# Lesson 5.3: Reviewing Claude's edits
+
+When Claude proposes an edit, a diff opens: your file on one side, Claude's
+version on the other. Claude waits until you decide.
+
+    `<Space>aa`{normal}  or  `:w`{vim}   accept the change
+    `<Space>ad`{normal}  or  `:q`{vim}   reject it (Claude is told, and you can say why)
+    `]c`{normal} / `[c`{normal}               jump between changed blocks in the diff
+
+You can edit Claude's side of the diff before accepting; your edits are kept.
+
+ 1. Wait for the diff from Lesson 5.2. Use `]c`{normal} to look through it.
+ 2. Change the error message on Claude's side to something of your own, then
+    `<Space>aa`{normal}. Check `inventory.py`: it has your version.
+ 3. Ask Claude to `Rename Item to Product everywhere`. When the first diff
+    opens, reject it with `<Space>ad`{normal} and tell Claude `Keep the name Item`.
+
+# Lesson 5.4: Claude Code's own keys
+
+Inside the panel, in typing mode, these are Claude Code's keys, not Neovim's:
+
+    `<Esc>`{normal}          interrupt Claude
+    `<Esc><Esc>`{normal}     go back to an earlier message and edit it
+    `<S-Tab>`{normal}        cycle permission modes (ask before edits / accept edits / plan)
+    `/`{normal}              slash commands, e.g. `/clear`, `/compact`, `/model`
+    `@`{normal}              mention a file by name
+    `!`{normal}              run a shell command
+
+# Summary
+
+    `<Space>ac`{normal} toggle   `<Space>af`{normal} focus    `<Space>ar`{normal} resume   `<Space>aC`{normal} continue
+    `<Space>as`{normal} send selection / tree item   `<Space>ab`{normal} add current file
+    `<Space>aa`{normal} accept diff   `<Space>ad`{normal} reject diff   `<C-q>`{normal} normal mode in the panel
+
+Back to the [Index](@tutor:config-00-index)
