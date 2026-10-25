@@ -10,16 +10,15 @@
   - [x] mason.nvim installs vtsls, svelte, basedpyright, ruff; installs also run when nvim starts without a file
   - [x] System servers: rust-analyzer (rustup), clangd (Xcode)
   - [x] Completion: blink.cmp
-  - [x] LSP keymaps (`gd`, `gD`, `<Space>e`, `<Space>cf`, `<Space>ih` + nvim's built-in `gr*`/`K`) and diagnostics display
+  - [x] LSP keymaps (`gd`, `gD`, `<Space>e`, `<Space>uh` + nvim's built-in `gr*`/`K`) and diagnostics display
+- [x] Formatting on save: conform.nvim (prettierd, rustfmt, clang-format, ruff); prettier/clang-format only where the project has a config
+- [x] Fuzzy finding: fzf-lua (`<Space><Space>`, `<Space>f*`, `<Space>gb` branches)
+- [x] Tree browser: nvim-tree (`<Space>n`, `<Space>N`)
+- [x] Git: gitsigns (inline blame, hunks), diffview (diffs, history), neogit (status, commit, branch, rebase)
+- [x] Terminal: `<C-/>` toggle, `<Esc><Esc>` / `<C-q>` to normal mode, 100k scrollback
+- [x] Claude Code: claudecode.nvim (`<Space>a*`), native terminal provider in a right split
+- [x] Statusline: lualine
+- [x] which-key
 
-## Up next
-- [ ] Formatting on save (conform.nvim: prettier, rustfmt, clang-format, ruff)
-- [ ] File browsing / fuzzy finding: fzf-lua (files, grep, buffers) + a tree browser for the NerdTree habit
-- [ ] Git (GitLens-style): neogit (branches, rebase, commit), diffview (diffs, file history), gitsigns (inline blame, hunks)
-- [ ] Terminal: toggleable terminal, easy escape to normal mode for vim-style scrollback
-- [ ] Claude Code: coder/claudecode.nvim (same IDE protocol as the VS Code extension: diffs, selection context)
-- [ ] Statusline and tabline
-- [ ] which-key for discovering `<Space>` mappings
-
-## Later / maybe
-- [ ] Decide what to do with `legacy/` once nothing in it is needed
+## To verify
+- [ ] Each piece above, tried for real

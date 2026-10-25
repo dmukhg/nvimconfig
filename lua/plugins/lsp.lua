@@ -1,6 +1,8 @@
 -- Servers installed by mason. rust-analyzer and clangd come from the system (see requirements.md).
 local mason_servers = { "vtsls", "svelte", "basedpyright", "ruff" }
 local system_servers = { "rust_analyzer", "clangd" }
+-- Non-LSP tools from mason (formatters). rustfmt and clang-format come from the system.
+local mason_tools = { "prettierd" }
 
 local function on_attach(args)
   local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -14,10 +16,9 @@ local function on_attach(args)
   map("gD", vim.lsp.buf.declaration, "Go to declaration")
   map("<Leader>e", vim.diagnostic.open_float, "Line diagnostics")
   map("<Leader>q", vim.diagnostic.setloclist, "Diagnostics to location list")
-  map("<Leader>cf", function() vim.lsp.buf.format({ async = true }) end, "Format buffer")
 
   if client and client:supports_method("textDocument/inlayHint") then
-    map("<Leader>ih", function()
+    map("<Leader>uh", function()
       vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = args.buf }), { bufnr = args.buf })
     end, "Toggle inlay hints")
   end
@@ -89,6 +90,17 @@ return {
       -- After the overrides above: installs any missing mason_servers and calls vim.lsp.enable() on them
       require("mason-lspconfig").setup({ ensure_installed = mason_servers })
       vim.lsp.enable(system_servers)
+
+      local registry = require("mason-registry")
+      registry.refresh(vim.schedule_wrap(function()
+        for _, name in ipairs(mason_tools) do
+          local ok, pkg = pcall(registry.get_package, name)
+          if ok and not pkg:is_installed() and not pkg:is_installing() then
+            vim.notify("[mason] installing " .. name)
+            pkg:install()
+          end
+        end
+      end))
 
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspAttach", { clear = true }),
